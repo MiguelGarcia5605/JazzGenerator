@@ -5,5 +5,7 @@
         "lib/**/*.jar",
         "C:/jMusic/jMusic1.6.5.jar",
         "C:/jMusic/inst/*"
-    ]
+    ],
+
+    "editor.inlayHints.enabled": "off"
 }

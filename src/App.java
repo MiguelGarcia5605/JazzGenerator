@@ -1,30 +1,24 @@
 import java.util.Random;
-
 import jm.JMC;
 import jm.music.data.*;
-import jm.music.tools.Mod;
 import jm.util.*;
  
 public class App implements JMC {
+
     public static void main(String[] args){
 
         Random RANDOM_NUMBER_GENERATOR = new Random();
-        Phrase[] database = MelodicCellDatabase.getDatabase();
+        MelodicCell[] database = MelodicCellDatabase.getDatabase();
 
         Part part = new Part("Sax");
         
         int lickMeasureLength = 2;
         for (int i = 0; i < lickMeasureLength * 2; i++) {
-            int randomInt;
-            
-            if(i % 2 == 0)  {
-                randomInt = RANDOM_NUMBER_GENERATOR.nextInt(0, 4);
-            } else {
-                randomInt = RANDOM_NUMBER_GENERATOR.nextInt(4, 8);
-            }
+            int randomInt = RANDOM_NUMBER_GENERATOR.nextInt(0, database.length);
 
             // Make sure it is a copy and not just a pointer
-            Phrase cell = database[randomInt].copy();
+            MelodicCell cell = database[randomInt].copy();
+
             cell.setTitle("cell_" + i + "_" + randomInt);
             part.add(cell);
         }
@@ -32,9 +26,9 @@ public class App implements JMC {
         Score lick = new Score(part);
 
         lick.setTempo(120.0);
-        lick.setKeySignature(4);
-        Mod.transpose(lick, 4);
+        // lick.setKeySignature(4);
+        // Mod.transpose(lick, 4);
         
-        Write.midi(lick, "Lick #3 Test.mid");
+        Write.midi(lick, "Lick.mid");
     }
 }

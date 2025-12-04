@@ -1,86 +1,20 @@
 import jm.JMC;
-import jm.music.data.Note;
-import jm.music.data.Phrase;
 
 public class MelodicCellDatabase implements JMC {
 
-    public static final Phrase[] database = new Phrase[] {
-        // Basic 1-3-5-7 Going Up
-        new Phrase(
-            new Note[] {
-                new Note(C4, EIGHTH_NOTE),
-                new Note(E4, EIGHTH_NOTE),
-                new Note(G4, EIGHTH_NOTE),
-                new Note(B4, EIGHTH_NOTE),
-            }
-        ),
-    
-        new Phrase(
-            new Note[] {
-                new Note(B3, EIGHTH_NOTE),
-                new Note(C4, EIGHTH_NOTE),
-                new Note(E4, EIGHTH_NOTE),
-                new Note(G4, EIGHTH_NOTE),
-            }
-        ),
+    public static final MelodicCell[] database = new MelodicCell[] {
+        new MelodicCell(1, 3, 5, 7, "maj7"),
+        new MelodicCell(7, 1, 3, 5, "maj7"),
+        new MelodicCell(5, 7, 1, 3, "maj7"),
+        new MelodicCell(3, 5, 7, 1, "maj7"),
 
-        new Phrase(
-            new Note[] {
-                new Note(G4, EIGHTH_NOTE),
-                new Note(B4, EIGHTH_NOTE),
-                new Note(C5, EIGHTH_NOTE),
-                new Note(E5, EIGHTH_NOTE),
-            }
-        ),
-
-        new Phrase(
-            new Note[] {
-                new Note(E4, EIGHTH_NOTE),
-                new Note(G4, EIGHTH_NOTE),
-                new Note(B4, EIGHTH_NOTE),
-                new Note(C5, EIGHTH_NOTE),
-            }
-        ),
-
-        // Basic 1-3-5-7 Going Down
-        new Phrase(
-            new Note[] {
-                new Note(B4, EIGHTH_NOTE),
-                new Note(G4, EIGHTH_NOTE),
-                new Note(E4, EIGHTH_NOTE),
-                new Note(C4, EIGHTH_NOTE),
-            }
-        ),
-    
-        new Phrase(
-            new Note[] {
-                new Note(C5, EIGHTH_NOTE),
-                new Note(B4, EIGHTH_NOTE),
-                new Note(G4, EIGHTH_NOTE),
-                new Note(E4, EIGHTH_NOTE),
-            }
-        ),
-
-        new Phrase(
-            new Note[] {
-                new Note(E5, EIGHTH_NOTE),
-                new Note(C5, EIGHTH_NOTE),
-                new Note(B4, EIGHTH_NOTE),
-                new Note(G4, EIGHTH_NOTE),
-            }
-        ),
-
-        new Phrase(
-            new Note[] {
-                new Note(G4, EIGHTH_NOTE),
-                new Note(E4, EIGHTH_NOTE),
-                new Note(C4, EIGHTH_NOTE),
-                new Note(B3, EIGHTH_NOTE),
-            }
-        ),
+        new MelodicCell(7, 5, 3, 1, "maj7"),
+        new MelodicCell(1, 7, 5, 3, "maj7"),
+        new MelodicCell(3, 1, 7, 5, "maj7"),
+        new MelodicCell(5, 3, 1, 7, "maj7"),
     };
 
-    public static Phrase[] getDatabase() {
+    public static MelodicCell[] getDatabase() {
         return database;
     }
 
