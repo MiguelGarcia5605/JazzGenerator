@@ -2,9 +2,7 @@
     "java.project.sourcePaths": ["src"],
     "java.project.outputPath": "bin",
     "java.project.referencedLibraries": [
-        "lib/**/*.jar",
-        "C:/jMusic/jMusic1.6.5.jar",
-        "C:/jMusic/inst/*"
+        "lib/**/*.jar"
     ],
 
     "editor.inlayHints.enabled": "off"
