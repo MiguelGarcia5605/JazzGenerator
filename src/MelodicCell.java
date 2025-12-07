@@ -1,5 +1,4 @@
 import java.util.Enumeration;
-
 import jm.music.data.Note;
 import jm.music.data.Phrase;
 
@@ -79,5 +78,30 @@ public class MelodicCell extends Phrase {
 
     public String getChord() {
         return mChord;
+    }
+
+    @Override 
+    public boolean equals(Object obj) {
+        if (obj instanceof MelodicCell) {
+            MelodicCell cellBeingComparedTo = (MelodicCell) obj;
+            Note[] notesOfCellBeingCompared = this.getNoteArray();
+            Note[] notesOfCellBeingComparedTo = cellBeingComparedTo.getNoteArray();
+            boolean cellsAreEqual = true;
+    
+            for (int i = 0; i < 4; i++) {
+                if (notesOfCellBeingCompared[i].getPitch() != notesOfCellBeingComparedTo[i].getPitch()) {
+                    cellsAreEqual = false;
+                    break;
+                }
+            }
+
+            if (!mChord.equals(cellBeingComparedTo.getChord())) {
+                cellsAreEqual = false;
+            }
+    
+            return cellsAreEqual;
+        } else {
+            return false;
+        }
     }
 }

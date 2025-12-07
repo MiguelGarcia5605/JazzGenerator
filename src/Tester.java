@@ -18,8 +18,4 @@ public class Tester implements JMC {
 
         Write.midi(lick, "lick.mid");
     }
-
-    public static final void print(String text) {
-        System.out.println(text);
-    }
 }
