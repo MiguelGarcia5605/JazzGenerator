@@ -14,7 +14,12 @@ public class Tester implements JMC {
             databasePath, "maj7");
         database.initializeDatabase();
 
-        Part lick = LickGenerator.generatorV2(database, 20);
-        Write.midi(lick, "Lick.mid");
+        Part lick = LickGenerator.generatorV2(database, 4);
+
+        Write.midi(lick, "lick.mid");
+    }
+
+    public static final void print(String text) {
+        System.out.println(text);
     }
 }
