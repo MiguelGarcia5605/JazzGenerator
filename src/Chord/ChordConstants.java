@@ -1,3 +1,5 @@
+package Chord;
+
 public class ChordConstants {
     public static final int
         MAJOR_SEVENTH = 0,

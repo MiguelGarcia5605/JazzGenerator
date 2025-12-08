@@ -1,8 +1,11 @@
+package Database;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Scanner;
-
+import Cell.Cell;
+import Chord.Chord;
+import Mod.MusicMod;
 import jm.music.data.Note;
 
 /**

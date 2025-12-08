@@ -1,3 +1,5 @@
+package Chord;
+
 /**
  * Represents a musical chord.
  */

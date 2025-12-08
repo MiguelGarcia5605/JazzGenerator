@@ -1,12 +1,16 @@
+package Generation;
 import java.util.ArrayList;
 import java.util.Random;
+import Cell.Cell;
+import Database.CellDatabase;
+import Mod.CellMod;
 import jm.JMC;
 import jm.music.data.Part;
 
 /**
  * This class is intended to hold various generation methods for jazz licks.
  */
-public class LickGenerator implements JMC {
+public class Generator implements JMC {
 
     private static final Random RANDOM_NUMBER_GENERATOR = new Random();
 
@@ -28,7 +32,7 @@ public class LickGenerator implements JMC {
             phrase.add(cell);
         }
 
-        Part lick = CellTranslate.convertToPart(phrase);
+        Part lick = CellMod.convertToPart(phrase);
 
         return lick;
     }

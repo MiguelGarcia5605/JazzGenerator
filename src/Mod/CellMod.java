@@ -1,11 +1,13 @@
+package Mod;
 import java.util.ArrayList;
 import java.util.Random;
+import Cell.Cell;
 import jm.music.data.Part;
 
 /**
  * This class contatains methods to manipulate ArrayList<MelodicCell> Objects.
  */
-public class CellTranslate {
+public class CellMod {
 
     private static final Random RANDOM_NUMBER_GENERATOR = new Random();
 
