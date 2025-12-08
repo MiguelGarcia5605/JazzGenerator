@@ -10,12 +10,22 @@ public class Tester implements JMC {
         String rootProjectPath = new File("").getAbsolutePath();
         String databasePath = rootProjectPath + "\\data\\MajorCellsDatabase.txt";
 
-        MelodicCellDatabase database = new MelodicCellDatabase(
-            databasePath, "maj7");
-        database.initializeDatabase();
+        // MelodicCellDatabase database = new MelodicCellDatabase(
+        //     databasePath, "maj7");
+        // database.initializeDatabase();
 
-        Part lick = LickGenerator.generatorV2(database, 4);
+        
+        // Phrase p = new Phrase();
+        // p.equals(p);
+        
+        // Note n = new Note();
+        // n.equals(n);
+        
+        
+        CellDatabase testDatabase = new CellDatabase();
+        testDatabase.readData(databasePath);
 
+        Part lick = LickGenerator.generatorV1(testDatabase, 16);
         Write.midi(lick, "lick.mid");
     }
 }
