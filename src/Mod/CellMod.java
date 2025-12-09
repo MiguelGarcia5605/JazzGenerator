@@ -2,7 +2,9 @@ package Mod;
 import java.util.ArrayList;
 import java.util.Random;
 import Cell.Cell;
+import Chord.ChordConstants;
 import Database.CellDatabase;
+import jm.JMC;
 import jm.music.data.Note;
 import jm.music.data.Part;
 
@@ -29,6 +31,130 @@ public class CellMod {
     }
 
     /**
+     * Implements scalar motion between cell's with first notes that are a fifth apart.
+     */
+    public static ArrayList<Cell> addScalarMotion(ArrayList<Cell> cellList) {
+
+        // Create a copy of the cell list
+        ArrayList<Cell> cellListCopy = (ArrayList<Cell>) cellList.clone();
+
+        for (int i = 1; i < cellListCopy.size(); i++) {
+            // Get cells you are comparing
+            Cell leftMostCell = cellListCopy.get(i - 1).copy();
+            Cell rightMostCell = cellList.get(i).copy();
+
+            Note leftMostCellFirstNote = leftMostCell.getNote(0);
+            Note rightMostCellFirstNote = rightMostCell.getNote(0);
+
+            if (isFifthInterval(leftMostCellFirstNote, rightMostCellFirstNote)) {
+
+                Cell newCell = leftMostCell.copy();
+
+                // check if its going up or down
+                if (leftMostCellFirstNote.getPitch() < rightMostCellFirstNote.getPitch()) {
+                    // up
+                    for (int j = 0; j < (leftMostCell.length() - 1); j++) {
+                        Note nextScalarNote = getNextScalerNoteUp(newCell.getNote(j), JMC.MAJOR_SCALE);
+                        newCell.setNote(nextScalarNote, j + 1);
+                    }
+
+                    for (Note n : newCell.getNoteArray()) {
+                        System.out.println(n.toString());
+                    }
+
+                    cellListCopy.set(i - 1, newCell);
+                } else {
+                    // down
+                    for (int j = 0; j < (leftMostCell.length() - 1); j++) {
+                        Note nextScalarNote = getNextScalerNoteDown(newCell.getNote(j), JMC.MAJOR_SCALE);
+                        newCell.setNote(nextScalarNote, j + 1);
+                    }
+
+                    for (Note n : newCell.getNoteArray()) {
+                        System.out.println(n.toString());
+                    }
+
+                    cellListCopy.set(i - 1, newCell);
+                }
+
+
+
+            }
+
+        }
+
+        return cellListCopy;
+    }
+
+    public static Note getNextScalerNoteUp(Note startingNote, int[] scaleMode) {
+
+        // Get scale degree
+        int startingNotePitch = startingNote.getPitch();
+        int scaleDegree = 1;
+        int remainder = startingNotePitch % 12;
+        for (int i = 0; i < scaleMode.length; i++) {
+            if (scaleMode[i] == remainder) {
+                scaleDegree = i + 1;
+            }
+
+        }
+
+        int nextNotePitch = startingNotePitch;
+
+        // Get next scalar note
+        if (scaleDegree != 7) {
+            nextNotePitch += scaleMode[scaleDegree] - scaleMode[scaleDegree - 1];
+        } else {
+            nextNotePitch += 12 - scaleMode[scaleMode.length - 1];
+        }
+
+        Note nextNote = new Note(nextNotePitch, JMC.EIGHTH_NOTE);
+
+        return nextNote;
+    }
+
+        public static Note getNextScalerNoteDown(Note startingNote, int[] scaleMode) {
+
+        // Get scale degree
+        int startingNotePitch = startingNote.getPitch();
+        int scaleDegree = 1;
+        int remainder = startingNotePitch % 12;
+        for (int i = 0; i < scaleMode.length; i++) {
+            if (scaleMode[i] == remainder) {
+                scaleDegree = i + 1;
+            }
+
+        }
+
+        int nextNotePitch = startingNotePitch;
+
+        // Get next scalar note
+        if (scaleDegree != 0) {
+            nextNotePitch -= scaleMode[scaleDegree - 1] - scaleMode[scaleDegree - 2];
+        } else {
+            nextNotePitch -= 12 - scaleMode[scaleMode.length - 1];
+        }
+
+        Note nextNote = new Note(nextNotePitch, JMC.EIGHTH_NOTE);
+
+        return nextNote;
+    }
+
+    public static boolean isFifthInterval(Note note1, Note note2) {
+        int FIFTH_INTERVAL_DIFFERENCE = 7;
+
+        int pitchOne = note1.getPitch();
+        int pitchTwo = note2.getPitch();
+        int difference = Math.abs(pitchOne - pitchTwo);
+
+        if (difference == FIFTH_INTERVAL_DIFFERENCE) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
      * Removes adjacent repeated notes and cells.
      */
     public static ArrayList<Cell> removeAdjacentDuplicates(ArrayList<Cell> cellList, CellDatabase database) {
@@ -43,8 +169,8 @@ public class CellMod {
         // Iterate through cell list copy
         for (int i = 1; i < cellListCopy.size(); i++) {
             // Get cells you are comparing
-            Cell leftMostCell = cellListCopy.get(i - 1);
-            Cell rightMostCell = cellList.get(i);
+            Cell leftMostCell = cellListCopy.get(i - 1).copy();
+            Cell rightMostCell = cellList.get(i).copy();
 
             // Check if cells are equal
             boolean cellsAreEqual = leftMostCell.equals(rightMostCell);
@@ -55,20 +181,15 @@ public class CellMod {
             // Replace current Cell if notes are not equal or if cellsHaveAdjacentDuplicates
             if (cellsAreEqual || cellsHaveAdjacentDuplicates) {
                 // Change cell until that statement is false
-                int j = 0;
                 while (true) {
-                    System.out.println(j);
                     Cell randomCell = databaseList.get(RANDOM_NUMBER_GENERATOR.nextInt(0, databaseList.size())).copy();
                     cellListCopy.set(i, randomCell);
                     
                     if (!leftMostCell.equals(randomCell) && !hasAdjacentDuplicates(leftMostCell, randomCell)) {
                         break;
                     }
-                    j++;
                 }
             }
-
-            System.out.println("BOOOOOOOOOOOOOm");
 
         }
 

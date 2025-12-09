@@ -62,4 +62,32 @@ public class Generator implements JMC {
 
         return lick;
     }
+
+        /**
+     * This generation method generates a lick of any length by randomly choosing MelodicCells from the given database.
+     * - Removes adjacent duplicate cells and notes
+     * @param database
+     * @param length : the amount of measures
+     * @return the generated jazz lick
+     */
+    public static final Part generatorV3(CellDatabase database, int length) {
+        ArrayList<Cell> phrase = new ArrayList<Cell>();
+
+        for (int i = 0; i < length * 2; i++) {
+            int randomInt = RANDOM_NUMBER_GENERATOR.nextInt(0, database.getDatabase().size());
+
+            Cell cell = database.getDatabase().get(randomInt).copy();         /* Must use copy() to avoid issues */
+
+            cell.setTitle("cell_" + i + "_" + randomInt);
+            phrase.add(cell);
+        }
+
+        phrase = CellMod.removeAdjacentDuplicates(phrase, database);
+
+        phrase = CellMod.addScalarMotion(phrase);
+
+        Part lick = CellMod.convertToPart(phrase);
+
+        return lick;
+    }
 }

@@ -1,9 +1,6 @@
 package Testers;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
-
-import Cell.Cell;
 import Database.CellDatabase;
 import Generation.Generator;
 import Mod.CellMod;
