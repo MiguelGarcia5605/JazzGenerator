@@ -47,4 +47,18 @@ public class Chord {
                 return "null";   
         }
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof Chord) {
+            Chord chord = (Chord) obj;
+            if (this.getChordValue() == chord.getChordValue()) {
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
+    }
 }

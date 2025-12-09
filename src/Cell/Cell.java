@@ -1,3 +1,5 @@
+package Cell;
+import Chord.Chord;
 import jm.music.data.Note;
 import jm.music.data.Phrase;
 
@@ -55,6 +57,7 @@ public class Cell extends Phrase {
     public boolean equals(Object obj) {
         if (obj instanceof Cell) {
             Cell otherCell = (Cell) obj;
+
             if (this.length() == otherCell.length()) {
                 // Go Through Note Arrays And Make Sure All Notes Are Equal
                 for (int i = 0; i < this.length(); i++) {
@@ -66,9 +69,10 @@ public class Cell extends Phrase {
                 return false;
             }
 
-            if (this.mChord != otherCell.getChord()) {
+            if (!this.mChord.equals(otherCell.getChord())) {
                 return false;
             }
+
             return true;
         } else {
             return false;
