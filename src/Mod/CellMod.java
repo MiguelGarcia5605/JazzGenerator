@@ -2,7 +2,7 @@ package Mod;
 import java.util.ArrayList;
 import java.util.Random;
 import Cell.Cell;
-import Chord.ChordConstants;
+import Chords.ChordConstants;
 import Database.CellDatabase;
 import jm.JMC;
 import jm.music.data.Note;

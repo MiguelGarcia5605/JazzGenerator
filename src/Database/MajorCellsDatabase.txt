@@ -13,3 +13,19 @@ B4-E4-G4-C4-maj7
 
 C4-D4-E4-G4-maj7
 G4-E4-D4-C4-maj7
+
+C4-Eb4-G4-Bb4-min7
+Bb4-C4-Eb4-G4-min7
+G4-Bb4-C4-Eb4-min7
+Eb4-G4-Bb4-C4-min7
+
+Bb4-G4-Eb4-C4-min7
+C4-Bb4-G4-Eb4-min7
+Eb4-C4-Bb4-G4-min7
+G4-Eb4-C4-Bb4-min7
+
+C4-G4-Eb4-Bb4-min7
+Bb4-Eb4-G4-C4-min7
+
+C4-D4-Eb4-G4-min7
+G4-Eb4-D4-C4-min7

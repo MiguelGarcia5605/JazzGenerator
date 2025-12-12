@@ -4,7 +4,8 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Scanner;
 import Cell.Cell;
-import Chord.Chord;
+import Chords.Chord;
+import Chords.ChordConstants;
 import Mod.MusicMod;
 import jm.music.data.Note;
 
@@ -21,6 +22,8 @@ import jm.music.data.Note;
 public class CellDatabase {
 
     public ArrayList<Cell> mData = new ArrayList<Cell>();
+    public ArrayList<Cell> mMajorCellsData = new ArrayList<Cell>();
+    public ArrayList<Cell> mMinorCellsData = new ArrayList<Cell>();
 
     /**
      * Imports data to the cell database from the given address of a .txt file.
@@ -33,7 +36,9 @@ public class CellDatabase {
         Scanner scanner = new Scanner(file);
 
         ArrayList<String> fileData = new ArrayList<String>();
-        ArrayList<Cell> cellList = new ArrayList<Cell>();
+        ArrayList<Cell> totalCellList = new ArrayList<Cell>();
+        ArrayList<Cell> majorCellList = new ArrayList<Cell>();
+        ArrayList<Cell> minorCellList = new ArrayList<Cell>();
 
         while (scanner.hasNext()) {
             fileData.add(scanner.next());
@@ -43,17 +48,25 @@ public class CellDatabase {
         
         // Convert Data To Cell Objects
         for (String datum: fileData) {
-            cellList.add(MusicMod.stringToCell(datum));
+            Cell cell = MusicMod.stringToCell(datum);
+            totalCellList.add(cell.copy());
+            
+            if (cell.getChord().getChordValue() == ChordConstants.MAJOR_SEVENTH) {
+                majorCellList.add(cell.copy());
+            } else if (cell.getChord().getChordValue() == ChordConstants.MINOR_SEVENTH) {
+                minorCellList.add(cell.copy());
+            }
         }
 
-        mData = (ArrayList<Cell>) cellList.clone();
+        mData = (ArrayList<Cell>) totalCellList.clone();
     }
 
     /**
      * Prints the database data to the console.
      */
-    public void printData() {
-        for (Cell cell : mData) {
+    public void printData(ArrayList<Cell> data) {
+        System.out.println("crumb");
+        for (Cell cell : data) {
             System.out.println(Chord.chordValueToString(cell.getChord().getChordValue()));
 
             Note[] notes = cell.getNoteArray();
@@ -68,5 +81,13 @@ public class CellDatabase {
 
     public ArrayList<Cell> getDatabase() {
         return mData;
+    }
+
+    public ArrayList<Cell> getMajorCellDatabase() {
+        return mMajorCellsData;
+    }
+
+    public ArrayList<Cell> getMinorCellDatabase() {
+        return mMinorCellsData;
     }
 }

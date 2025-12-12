@@ -1,4 +1,4 @@
-package Chord;
+package Chords;
 
 public class ChordConstants {
     public static final int

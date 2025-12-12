@@ -1,5 +1,5 @@
 package Cell;
-import Chord.Chord;
+import Chords.Chord;
 import jm.music.data.Note;
 import jm.music.data.Phrase;
 

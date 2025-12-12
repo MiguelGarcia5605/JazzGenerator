@@ -2,7 +2,7 @@ package Mod;
 import java.util.ArrayList;
 import java.util.Arrays;
 import Cell.Cell;
-import Chord.Chord;
+import Chords.Chord;
 import jm.JMC;
 import jm.music.data.Note;
 

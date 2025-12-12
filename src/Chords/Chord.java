@@ -1,4 +1,6 @@
-package Chord;
+package Chords;
+
+import jm.music.data.Note;
 
 /**
  * Represents a musical chord.
