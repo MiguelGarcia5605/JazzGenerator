@@ -1,4 +1,4 @@
-package utils.chord;
+package generator.chord;
 
 public class Chord extends ChordType{
 
