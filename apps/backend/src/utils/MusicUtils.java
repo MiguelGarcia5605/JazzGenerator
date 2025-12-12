@@ -6,7 +6,7 @@ import java.util.Random;
 import jm.JMC;
 import jm.music.data.Note;
 import jm.music.data.Part;
-import utils.cell.Cell;
+import generator.cell.Cell;
 
 public class MusicUtils implements JMC{
 
@@ -175,47 +175,44 @@ public class MusicUtils implements JMC{
         }
     }
 
-    // /**
-    //  * Removes adjacent repeated notes and cells.
-    //  */
-    // public static ArrayList<Cell> removeAdjacentDuplicates(ArrayList<Cell> cellList, CellDatabase database) {
+    /**
+     * Removes adjacent repeated notes and cells.
+     */
+    public static ArrayList<Cell> removeAdjacentDuplicates(ArrayList<Cell> cellList, ArrayList<Cell> databaseList) {
 
-    //     // Create a copy of the cell list
-    //     ArrayList<Cell> cellListCopy = (ArrayList<Cell>) cellList.clone();
-
-    //     // Get database list
-    //     ArrayList<Cell> databaseList = database.getDatabase();
+        // Create a copy of the cell list
+        ArrayList<Cell> cellListCopy = (ArrayList<Cell>) cellList.clone();
 
         
-    //     // Iterate through cell list copy
-    //     for (int i = 1; i < cellListCopy.size(); i++) {
-    //         // Get cells you are comparing
-    //         Cell leftMostCell = cellListCopy.get(i - 1).copy();
-    //         Cell rightMostCell = cellList.get(i).copy();
+        // Iterate through cell list copy
+        for (int i = 1; i < cellListCopy.size(); i++) {
+            // Get cells you are comparing
+            Cell leftMostCell = cellListCopy.get(i - 1).copy();
+            Cell rightMostCell = cellList.get(i).copy();
 
-    //         // Check if cells are equal
-    //         boolean cellsAreEqual = leftMostCell.equals(rightMostCell);
+            // Check if cells are equal
+            boolean cellsAreEqual = leftMostCell.equals(rightMostCell);
 
-    //         // Check if cells contain adjacent repeating notes
-    //         boolean cellsHaveAdjacentDuplicates = hasAdjacentDuplicates(leftMostCell, rightMostCell);
+            // Check if cells contain adjacent repeating notes
+            boolean cellsHaveAdjacentDuplicates = hasAdjacentDuplicates(leftMostCell, rightMostCell);
 
-    //         // Replace current Cell if notes are not equal or if cellsHaveAdjacentDuplicates
-    //         if (cellsAreEqual || cellsHaveAdjacentDuplicates) {
-    //             // Change cell until that statement is false
-    //             while (true) {
-    //                 Cell randomCell = databaseList.get(RANDOM_NUMBER_GENERATOR.nextInt(0, databaseList.size())).copy();
-    //                 cellListCopy.set(i, randomCell);
+            // Replace current Cell if notes are not equal or if cellsHaveAdjacentDuplicates
+            if (cellsAreEqual || cellsHaveAdjacentDuplicates) {
+                // Change cell until that statement is false
+                while (true) {
+                    Cell randomCell = databaseList.get(RANDOM_NUMBER_GENERATOR.nextInt(0, databaseList.size())).copy();
+                    cellListCopy.set(i, randomCell);
                     
-    //                 if (!leftMostCell.equals(randomCell) && !hasAdjacentDuplicates(leftMostCell, randomCell)) {
-    //                     break;
-    //                 }
-    //             }
-    //         }
+                    if (!leftMostCell.equals(randomCell) && !hasAdjacentDuplicates(leftMostCell, randomCell)) {
+                        break;
+                    }
+                }
+            }
 
-    //     }
+        }
 
-    //     return cellListCopy;
-    // }
+        return cellListCopy;
+    }
 
     private static boolean hasAdjacentDuplicates(Cell leftMostCell, Cell rightMostCell) {
         // Get Notes

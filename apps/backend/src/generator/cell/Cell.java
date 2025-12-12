@@ -1,7 +1,7 @@
-package utils.cell;
+package generator.cell;
 import jm.music.data.Note;
 import jm.music.data.Phrase;
-import utils.chord.Chord;
+import generator.chord.Chord;
 
 public class Cell extends Phrase {
 
