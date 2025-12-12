@@ -3,16 +3,32 @@ package gui;
 import java.awt.Dimension;
 import java.awt.Rectangle;
 import java.awt.Toolkit;
+import java.io.File;
+
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JTextField;
+import javax.swing.WindowConstants;
 
-public class AppWindow{
+public class AppWindow {
+
+    public static final String ROOT_PROJECT_PATH = new File("").getAbsolutePath();
+    public static final String ICON_PATH = ROOT_PROJECT_PATH + "\\apps\\frontend\\src\\gui\\icons\\sax.png";
+    public static final ImageIcon ICON = new ImageIcon(ICON_PATH);
+
+    public static final String 
+        BUTTON_GHOST_TEXT = "Generate Lick",
+        TEXT_FIELD_1_GHOST_TEXT = "Dmin7 Gdom7 Cmaj7...",
+        TEXT_FIELD_2_GHOST_TEXT = "C:/MidiFiles...",
+        TITLE = "Jazz Generator";
+
+    public static final float GHOST_TEXT_OPAQUE_VALUE = 0.5f;
 
     public static final Dimension SCREEN_DIMENSIONS = Toolkit.getDefaultToolkit().getScreenSize();
 
-    public static int WINDOW_Y_MARGIN = 300;
-    public static int COMPONENTS_X_MARGIN = 100;
+    public static final int WINDOW_Y_MARGIN = 300;
+    public static final int COMPONENTS_X_MARGIN = 100;
 
     public static final int
         WINDOW_WIDTH = (int) SCREEN_DIMENSIONS.getWidth() / 3,
@@ -49,18 +65,29 @@ public class AppWindow{
     private JTextField mTextField1;
     private JTextField mTextField2;
 
+    private TextPrompt mGhostText1;
+    private TextPrompt mGhostText2;
+
     public AppWindow() {
         init();
     }
 
     private void init() {
         mFrame = new JFrame();
-        mButton = new JButton("Generate Lick");
-        mTextField1 = new JTextField("Enter a chord progression...");
-        mTextField2 = new JTextField("Enter the output folder path...");
+        mButton = new JButton(BUTTON_GHOST_TEXT);
+        mTextField1 = new JTextField();
+        mTextField2 = new JTextField();
 
-        mFrame.setTitle("Jazz Generator");
+        mGhostText1 = new TextPrompt(TEXT_FIELD_1_GHOST_TEXT, mTextField1);
+        mGhostText2 = new TextPrompt(TEXT_FIELD_2_GHOST_TEXT, mTextField2);
+
+        mGhostText1.changeAlpha(GHOST_TEXT_OPAQUE_VALUE);
+        mGhostText2.changeAlpha(GHOST_TEXT_OPAQUE_VALUE);
+
+        mFrame.setTitle(TITLE);
         mFrame.setResizable(false);
+
+        mButton.addActionListener(new PressListener(this));
 
         mButton.setBounds(BUTTON_BOUNDS);
         mTextField1.setBounds(TEXT_FIELD_1_BOUNDS);
@@ -70,8 +97,18 @@ public class AppWindow{
         mFrame.add(mTextField1);
         mFrame.add(mTextField2);
 
+        mFrame.setIconImage(ICON.getImage());
+        mFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         mFrame.setBounds(WINDOW_BOUNDS);
         mFrame.setLayout(null);
         mFrame.setVisible(true);
+    }
+
+    public String getField1Text() {
+        return mTextField1.getText();
+    }
+
+    public String getField2Text() {
+        return mTextField2.getText();
     }
 }

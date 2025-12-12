@@ -1,6 +1,5 @@
 {
     "java.project.referencedLibraries": [
-        "lib/**/*.jar",
         "apps/project/lib/jMusic/jMusic1.6.5.jar"
     ],
 

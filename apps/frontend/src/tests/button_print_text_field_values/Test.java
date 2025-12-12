@@ -1,4 +1,4 @@
-package tests.show_app_window;
+package tests.button_print_text_field_values;
 
 import gui.AppWindow;
 
