@@ -2,22 +2,45 @@ package utils;
 
 import java.util.ArrayList;
 import java.util.Random;
+
 import jm.JMC;
 import jm.music.data.Note;
 import jm.music.data.Part;
+import utils.cell.Cell;
 
-/**
- * This class contatains methods to manipulate ArrayList<MelodicCell> Objects.
- */
-public class CellMod {
+public class MusicUtils implements JMC{
+
+    public static final int BASE_MIDI_NOTE = C0;
 
     private static final Random RANDOM_NUMBER_GENERATOR = new Random();
 
-    /**
-     * Converts an ArrayList<MelodicCells> to a Part.
-     * @param cellList : the cell list to convert
-     * @return the cell list as a Part
-     */
+    public static final int[] NOTE_OFFSETS = new int[] { /* Used for conversions. */
+        0, 0, 1, 1, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 8, 8, 9, 10, 10, 11, 11
+    };
+
+    public static final String[] NOTES_AS_STRINGS = new String[] {
+        "B#", "C", "C#", "Db", "D", "D#", "Eb", "E", "Fb", "E#", "F", "F#", "Gb", "G", "G#", "Ab", "A",  "A#", "Bb", "B", "Cb"
+    };
+
+    public static int noteNameToMidiValue(String note) {
+        int lengthOfString = note.length();
+        int octaveNumber = Integer.parseInt(note.substring(lengthOfString - 1, lengthOfString));
+        String noteName = note.substring(0, lengthOfString - 1);
+        int noteOffset = getNoteOffset(noteName);
+
+        return BASE_MIDI_NOTE + noteOffset + (octaveNumber * 12); /* 12 Notes Total. This expression calculates the Midi Value*/
+    }
+
+    private static int getNoteOffset(String note) {
+        for (int i = 0; i < NOTES_AS_STRINGS.length; i++) {
+            if (NOTES_AS_STRINGS[i].equals(note)) {
+                return NOTE_OFFSETS[i];
+            }
+        }
+
+        return 0;
+    }
+
     public static final Part convertToPart(ArrayList<Cell> cellList) {
         Part part = new Part();
 
@@ -111,7 +134,7 @@ public class CellMod {
         return nextNote;
     }
 
-        public static Note getNextScalerNoteDown(Note startingNote, int[] scaleMode) {
+    public static Note getNextScalerNoteDown(Note startingNote, int[] scaleMode) {
 
         // Get scale degree
         int startingNotePitch = startingNote.getPitch();

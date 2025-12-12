@@ -1,14 +1,9 @@
-package utils;
+package utils.cell;
 import jm.music.data.Note;
 import jm.music.data.Phrase;
+import utils.chord.Chord;
 
-/**
- * This class represents a musical phrase associated with a chord.
- */
 public class Cell extends Phrase {
-    
-    public static final double DEFAULT_NOTE_LENGTH = EIGHTH_NOTE;
-    public static final double DEFAULT_LENGTH_IN_MEASURES = 1;
 
     public Chord mChord;
 
@@ -16,11 +11,6 @@ public class Cell extends Phrase {
         super();
     }
 
-    /**
-     * Constructs a Cell Object.
-     * @param notes : the notes
-     * @param chord : the chord context
-     */
     public Cell(Note[] notes, Chord chord) {
         super(notes);
         mChord = chord;
