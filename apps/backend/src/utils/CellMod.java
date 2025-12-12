@@ -1,13 +1,10 @@
-package tools;
+package utils;
 
 import java.util.ArrayList;
 import java.util.Random;
-
-import database.CellDatabase;
 import jm.JMC;
 import jm.music.data.Note;
 import jm.music.data.Part;
-import tools.Cell;
 
 /**
  * This class contatains methods to manipulate ArrayList<MelodicCell> Objects.
@@ -155,47 +152,47 @@ public class CellMod {
         }
     }
 
-    /**
-     * Removes adjacent repeated notes and cells.
-     */
-    public static ArrayList<Cell> removeAdjacentDuplicates(ArrayList<Cell> cellList, CellDatabase database) {
+    // /**
+    //  * Removes adjacent repeated notes and cells.
+    //  */
+    // public static ArrayList<Cell> removeAdjacentDuplicates(ArrayList<Cell> cellList, CellDatabase database) {
 
-        // Create a copy of the cell list
-        ArrayList<Cell> cellListCopy = (ArrayList<Cell>) cellList.clone();
+    //     // Create a copy of the cell list
+    //     ArrayList<Cell> cellListCopy = (ArrayList<Cell>) cellList.clone();
 
-        // Get database list
-        ArrayList<Cell> databaseList = database.getDatabase();
+    //     // Get database list
+    //     ArrayList<Cell> databaseList = database.getDatabase();
 
         
-        // Iterate through cell list copy
-        for (int i = 1; i < cellListCopy.size(); i++) {
-            // Get cells you are comparing
-            Cell leftMostCell = cellListCopy.get(i - 1).copy();
-            Cell rightMostCell = cellList.get(i).copy();
+    //     // Iterate through cell list copy
+    //     for (int i = 1; i < cellListCopy.size(); i++) {
+    //         // Get cells you are comparing
+    //         Cell leftMostCell = cellListCopy.get(i - 1).copy();
+    //         Cell rightMostCell = cellList.get(i).copy();
 
-            // Check if cells are equal
-            boolean cellsAreEqual = leftMostCell.equals(rightMostCell);
+    //         // Check if cells are equal
+    //         boolean cellsAreEqual = leftMostCell.equals(rightMostCell);
 
-            // Check if cells contain adjacent repeating notes
-            boolean cellsHaveAdjacentDuplicates = hasAdjacentDuplicates(leftMostCell, rightMostCell);
+    //         // Check if cells contain adjacent repeating notes
+    //         boolean cellsHaveAdjacentDuplicates = hasAdjacentDuplicates(leftMostCell, rightMostCell);
 
-            // Replace current Cell if notes are not equal or if cellsHaveAdjacentDuplicates
-            if (cellsAreEqual || cellsHaveAdjacentDuplicates) {
-                // Change cell until that statement is false
-                while (true) {
-                    Cell randomCell = databaseList.get(RANDOM_NUMBER_GENERATOR.nextInt(0, databaseList.size())).copy();
-                    cellListCopy.set(i, randomCell);
+    //         // Replace current Cell if notes are not equal or if cellsHaveAdjacentDuplicates
+    //         if (cellsAreEqual || cellsHaveAdjacentDuplicates) {
+    //             // Change cell until that statement is false
+    //             while (true) {
+    //                 Cell randomCell = databaseList.get(RANDOM_NUMBER_GENERATOR.nextInt(0, databaseList.size())).copy();
+    //                 cellListCopy.set(i, randomCell);
                     
-                    if (!leftMostCell.equals(randomCell) && !hasAdjacentDuplicates(leftMostCell, randomCell)) {
-                        break;
-                    }
-                }
-            }
+    //                 if (!leftMostCell.equals(randomCell) && !hasAdjacentDuplicates(leftMostCell, randomCell)) {
+    //                     break;
+    //                 }
+    //             }
+    //         }
 
-        }
+    //     }
 
-        return cellListCopy;
-    }
+    //     return cellListCopy;
+    // }
 
     private static boolean hasAdjacentDuplicates(Cell leftMostCell, Cell rightMostCell) {
         // Get Notes

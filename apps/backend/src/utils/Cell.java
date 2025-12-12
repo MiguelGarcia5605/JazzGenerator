@@ -1,4 +1,4 @@
-package tools;
+package utils;
 import jm.music.data.Note;
 import jm.music.data.Phrase;
 
@@ -7,6 +7,9 @@ import jm.music.data.Phrase;
  */
 public class Cell extends Phrase {
     
+    public static final double DEFAULT_NOTE_LENGTH = EIGHTH_NOTE;
+    public static final double DEFAULT_LENGTH_IN_MEASURES = 1;
+
     public Chord mChord;
 
     public Cell() {
