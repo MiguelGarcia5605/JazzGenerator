@@ -1,0 +1,3 @@
+note1-note2-note3-maj
+note1-note2-note3-min
+note1-note2-note3-dom7
