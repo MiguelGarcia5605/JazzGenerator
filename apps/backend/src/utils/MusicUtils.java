@@ -7,8 +7,9 @@ import jm.JMC;
 import jm.music.data.Note;
 import jm.music.data.Part;
 import generator.cell.Cell;
+import generator.cell.RhythmicCell;
 
-public class MusicUtils implements JMC{
+public final class MusicUtils implements JMC{
 
     public static final int BASE_MIDI_NOTE = C0;
 
@@ -22,6 +23,12 @@ public class MusicUtils implements JMC{
         "B#", "C", "C#", "Db", "D", "D#", "Eb", "E", "Fb", "E#", "F", "F#", "Gb", "G", "G#", "Ab", "A",  "A#", "Bb", "B", "Cb"
     };
 
+    /**
+     * converts a note name as a string to an integer. for example C4 to 60.
+     * @param note
+     * @return
+    
+    */
     public static int noteNameToMidiValue(String note) {
         int lengthOfString = note.length();
         int octaveNumber = Integer.parseInt(note.substring(lengthOfString - 1, lengthOfString));
@@ -52,59 +59,24 @@ public class MusicUtils implements JMC{
     }
 
     /**
-     * Implements scalar motion between cell's with first notes that are a fifth apart.
+     * 1 = is fifth going up
+     * -1 = is fifth going down
+     * 0 = is not fifth
      */
-    public static ArrayList<Cell> addScalarMotion(ArrayList<Cell> cellList) {
+    public static int isFifthInterval(Note note1, Note note2) {
+        int FIFTH_INTERVAL_CHROMATIC_DIFFERENCE = 7;
 
-        // Create a copy of the cell list
-        ArrayList<Cell> cellListCopy = (ArrayList<Cell>) cellList.clone();
+        int pitchOne = note1.getPitch();
+        int pitchTwo = note2.getPitch();
+        int difference = pitchOne - pitchTwo;
 
-        for (int i = 1; i < cellListCopy.size(); i++) {
-            // Get cells you are comparing
-            Cell leftMostCell = cellListCopy.get(i - 1).copy();
-            Cell rightMostCell = cellList.get(i).copy();
-
-            Note leftMostCellFirstNote = leftMostCell.getNote(0);
-            Note rightMostCellFirstNote = rightMostCell.getNote(0);
-
-            if (isFifthInterval(leftMostCellFirstNote, rightMostCellFirstNote)) {
-
-                Cell newCell = leftMostCell.copy();
-
-                // check if its going up or down
-                if (leftMostCellFirstNote.getPitch() < rightMostCellFirstNote.getPitch()) {
-                    // up
-                    for (int j = 0; j < (leftMostCell.length() - 1); j++) {
-                        Note nextScalarNote = getNextScalerNoteUp(newCell.getNote(j), JMC.MAJOR_SCALE);
-                        newCell.setNote(nextScalarNote, j + 1);
-                    }
-
-                    for (Note n : newCell.getNoteArray()) {
-                        System.out.println(n.toString());
-                    }
-
-                    cellListCopy.set(i - 1, newCell);
-                } else {
-                    // down
-                    for (int j = 0; j < (leftMostCell.length() - 1); j++) {
-                        Note nextScalarNote = getNextScalerNoteDown(newCell.getNote(j), JMC.MAJOR_SCALE);
-                        newCell.setNote(nextScalarNote, j + 1);
-                    }
-
-                    for (Note n : newCell.getNoteArray()) {
-                        System.out.println(n.toString());
-                    }
-
-                    cellListCopy.set(i - 1, newCell);
-                }
-
-
-
-            }
-
+        if (difference == -FIFTH_INTERVAL_CHROMATIC_DIFFERENCE) {
+            return 1;
+        } else if (difference == FIFTH_INTERVAL_CHROMATIC_DIFFERENCE) {
+            return -1;
+        } else {
+            return 0;
         }
-
-        return cellListCopy;
     }
 
     public static Note getNextScalerNoteUp(Note startingNote, int[] scaleMode) {
@@ -129,7 +101,7 @@ public class MusicUtils implements JMC{
             nextNotePitch += 12 - scaleMode[scaleMode.length - 1];
         }
 
-        Note nextNote = new Note(nextNotePitch, JMC.EIGHTH_NOTE);
+        Note nextNote = new Note(nextNotePitch, startingNote.getRhythmValue());
 
         return nextNote;
     }
@@ -150,71 +122,18 @@ public class MusicUtils implements JMC{
         int nextNotePitch = startingNotePitch;
 
         // Get next scalar note
-        if (scaleDegree != 0) {
+        if (scaleDegree != 1) {
             nextNotePitch -= scaleMode[scaleDegree - 1] - scaleMode[scaleDegree - 2];
         } else {
             nextNotePitch -= 12 - scaleMode[scaleMode.length - 1];
         }
 
-        Note nextNote = new Note(nextNotePitch, JMC.EIGHTH_NOTE);
+        Note nextNote = new Note(nextNotePitch, startingNote.getRhythmValue());
 
         return nextNote;
     }
 
-    public static boolean isFifthInterval(Note note1, Note note2) {
-        int FIFTH_INTERVAL_DIFFERENCE = 7;
-
-        int pitchOne = note1.getPitch();
-        int pitchTwo = note2.getPitch();
-        int difference = Math.abs(pitchOne - pitchTwo);
-
-        if (difference == FIFTH_INTERVAL_DIFFERENCE) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    /**
-     * Removes adjacent repeated notes and cells.
-     */
-    public static ArrayList<Cell> removeAdjacentDuplicates(ArrayList<Cell> cellList, ArrayList<Cell> databaseList) {
-
-        // Create a copy of the cell list
-        ArrayList<Cell> cellListCopy = (ArrayList<Cell>) cellList.clone();
-
-        
-        // Iterate through cell list copy
-        for (int i = 1; i < cellListCopy.size(); i++) {
-            // Get cells you are comparing
-            Cell leftMostCell = cellListCopy.get(i - 1).copy();
-            Cell rightMostCell = cellList.get(i).copy();
-
-            // Check if cells are equal
-            boolean cellsAreEqual = leftMostCell.equals(rightMostCell);
-
-            // Check if cells contain adjacent repeating notes
-            boolean cellsHaveAdjacentDuplicates = hasAdjacentDuplicates(leftMostCell, rightMostCell);
-
-            // Replace current Cell if notes are not equal or if cellsHaveAdjacentDuplicates
-            if (cellsAreEqual || cellsHaveAdjacentDuplicates) {
-                // Change cell until that statement is false
-                while (true) {
-                    Cell randomCell = databaseList.get(RANDOM_NUMBER_GENERATOR.nextInt(0, databaseList.size())).copy();
-                    cellListCopy.set(i, randomCell);
-                    
-                    if (!leftMostCell.equals(randomCell) && !hasAdjacentDuplicates(leftMostCell, randomCell)) {
-                        break;
-                    }
-                }
-            }
-
-        }
-
-        return cellListCopy;
-    }
-
-    private static boolean hasAdjacentDuplicates(Cell leftMostCell, Cell rightMostCell) {
+    public static boolean hasAdjacentDuplicateNotes(Cell leftMostCell, Cell rightMostCell) {
         // Get Notes
         Note lastNoteOfLeftMostCell = leftMostCell.getNote(leftMostCell.length() - 1);
         Note firstNoteOfRightMostCell = rightMostCell.getNote(0);
@@ -228,5 +147,36 @@ public class MusicUtils implements JMC{
         } else {
             return false;
         }
+    }
+
+    public static boolean hasAdjacentDuplicateCells(Cell leftMostCell, Cell rightMostCell) {
+        boolean isDuplicate = leftMostCell.equals(rightMostCell);
+        return isDuplicate;
+    }
+
+    public static Cell applyRhythmicTranslation(Cell cell, RhythmicCell rhythmicCell) {
+        // apply translation to first note
+        Cell translatedCell = new Cell();
+
+        for (int i = 0; i < cell.length(); i++) {
+            int newNotePitch;
+            double newRhythmicValue;
+
+            if (rhythmicCell.getRhythmicValue(i) > 0.0) {
+                newNotePitch = cell.getNote(i).getPitch();
+                newRhythmicValue = rhythmicCell.getRhythmicValue(i);
+                Note translatedNote = new Note(newNotePitch, newRhythmicValue);
+                translatedCell.add(translatedNote);
+    
+            } else if (rhythmicCell.getRhythmicValue(i) < 0.0) {
+                newNotePitch = REST;
+                newRhythmicValue = -rhythmicCell.getRhythmicValue(i);
+                Note translatedNote = new Note(newNotePitch, newRhythmicValue);
+                translatedCell.add(translatedNote);
+            }
+            
+        }
+
+        return translatedCell;
     }
 }
