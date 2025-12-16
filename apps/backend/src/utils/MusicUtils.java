@@ -159,18 +159,16 @@ public final class MusicUtils implements JMC{
         Cell translatedCell = new Cell();
 
         for (int i = 0; i < cell.length(); i++) {
-            int newNotePitch;
-            double newRhythmicValue;
 
             if (rhythmicCell.getRhythmicValue(i) > 0.0) {
-                newNotePitch = cell.getNote(i).getPitch();
-                newRhythmicValue = rhythmicCell.getRhythmicValue(i);
+                int newNotePitch = cell.getNote(i).getPitch();
+                double newRhythmicValue = rhythmicCell.getRhythmicValue(i);
                 Note translatedNote = new Note(newNotePitch, newRhythmicValue);
                 translatedCell.add(translatedNote);
     
             } else if (rhythmicCell.getRhythmicValue(i) < 0.0) {
-                newNotePitch = REST;
-                newRhythmicValue = -rhythmicCell.getRhythmicValue(i);
+                int newNotePitch = REST;
+                double newRhythmicValue = -rhythmicCell.getRhythmicValue(i);
                 Note translatedNote = new Note(newNotePitch, newRhythmicValue);
                 translatedCell.add(translatedNote);
             }
