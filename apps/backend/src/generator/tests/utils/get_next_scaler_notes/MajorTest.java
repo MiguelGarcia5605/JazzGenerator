@@ -1,5 +1,7 @@
 package generator.tests.utils.get_next_scaler_notes;
 
+import generator.chord.Chord;
+import generator.chord.ChordType;
 import jm.JMC;
 import jm.music.data.Note;
 import utils.MusicUtils;
@@ -15,9 +17,9 @@ public class MajorTest implements JMC{
 
         // Case 1 - 60, 62, 64, 65; Cmaj7 chord going up
         Note startingNote = new Note(C4, EIGHTH_NOTE);
-        Note secondNote = MusicUtils.getNextScalerNoteUp(startingNote, MAJOR_SCALE);
-        Note thirdNote = MusicUtils.getNextScalerNoteUp(secondNote, MAJOR_SCALE);
-        Note fourthNote = MusicUtils.getNextScalerNoteUp(thirdNote, MAJOR_SCALE);
+        Note secondNote = MusicUtils.getNextScalerNoteUp(startingNote, new Chord(ChordType.MAJOR_SEVENTH, C4));
+        Note thirdNote = MusicUtils.getNextScalerNoteUp(secondNote, new Chord(ChordType.MAJOR_SEVENTH, C4));
+        Note fourthNote = MusicUtils.getNextScalerNoteUp(thirdNote, new Chord(Chord.MAJOR_SEVENTH, C4));
 
         System.out.println(startingNote);
         System.out.println(secondNote);
@@ -28,9 +30,9 @@ public class MajorTest implements JMC{
 
         // Case 2 - 60, 59, 57, 55; Cmaj7 chord going down
         Note startingNote2 = new Note(C4, EIGHTH_NOTE);
-        Note secondNote2 = MusicUtils.getNextScalerNoteDown(startingNote2, MAJOR_SCALE);
-        Note thirdNote2 = MusicUtils.getNextScalerNoteDown(secondNote2, MAJOR_SCALE);
-        Note fourthNote2 = MusicUtils.getNextScalerNoteDown(thirdNote2, MAJOR_SCALE);
+        Note secondNote2 = MusicUtils.getNextScalerNoteDown(startingNote2, new Chord(ChordType.MAJOR_SEVENTH, C4));
+        Note thirdNote2 = MusicUtils.getNextScalerNoteDown(secondNote2, new Chord(ChordType.MAJOR_SEVENTH, C4));
+        Note fourthNote2 = MusicUtils.getNextScalerNoteDown(thirdNote2, new Chord(ChordType.MAJOR_SEVENTH, C4));
 
         System.out.println(startingNote2);
         System.out.println(secondNote2);
@@ -41,9 +43,9 @@ public class MajorTest implements JMC{
 
         // Case 2 - 64, 65, 67, 69; Cmaj7 chord going up
         Note startingNote3 = new Note(E4, EIGHTH_NOTE);
-        Note secondNote3 = MusicUtils.getNextScalerNoteUp(startingNote3, MAJOR_SCALE);
-        Note thirdNote3 = MusicUtils.getNextScalerNoteUp(secondNote3, MAJOR_SCALE);
-        Note fourthNote3 = MusicUtils.getNextScalerNoteUp(thirdNote3, MAJOR_SCALE);
+        Note secondNote3 = MusicUtils.getNextScalerNoteUp(startingNote3, new Chord(ChordType.MAJOR_SEVENTH, C4));
+        Note thirdNote3 = MusicUtils.getNextScalerNoteUp(secondNote3, new Chord(ChordType.MAJOR_SEVENTH, C4));
+        Note fourthNote3 = MusicUtils.getNextScalerNoteUp(thirdNote3, new Chord(ChordType.MAJOR_SEVENTH, C4));
 
         System.out.println(startingNote3);
         System.out.println(secondNote3);

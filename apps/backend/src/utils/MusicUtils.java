@@ -1,6 +1,7 @@
 package utils;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Random;
 
 import jm.JMC;
@@ -8,6 +9,8 @@ import jm.music.data.Note;
 import jm.music.data.Part;
 import generator.cell.Cell;
 import generator.cell.RhythmicCell;
+import generator.chord.Chord;
+import generator.chord.ChordProgression;
 
 public final class MusicUtils implements JMC{
 
@@ -22,6 +25,74 @@ public final class MusicUtils implements JMC{
     public static final String[] NOTES_AS_STRINGS = new String[] {
         "B#", "C", "C#", "Db", "D", "D#", "Eb", "E", "Fb", "E#", "F", "F#", "Gb", "G", "G#", "Ab", "A",  "A#", "Bb", "B", "Cb"
     };
+
+    public static ArrayList<Cell> generateLick(ArrayList<Cell> cellDatabase, ArrayList<RhythmicCell> rhythmicCellDatabase, ChordProgression chordProgression) {
+        ArrayList<Cell> lick = new ArrayList<Cell>();
+
+        // Add random cells from cell database
+        for (int i = 0; i < chordProgression.getLength(); i++) {
+            lick.add(cellDatabase.get(i).copy()); // randomize later RANDOM_NUMBER_GENERATOR.nextInt(0, cellDatabase.size())
+        }
+
+        // loop through lick and modify cell
+        for (int i = 0; i < (lick.size() - 1); i++) {
+            Cell currentCell = lick.get(i).copy();
+            Cell nextCell = lick.get(i + 1).copy();
+
+            Cell modifiedCell = new Cell();
+
+
+            
+            // Check if lick has adjacent duplicate cells or notes
+            boolean hasDuplicateNotes = MusicUtils.hasAdjacentDuplicateNotes(currentCell, nextCell);
+            boolean hasDuplicateCells = MusicUtils.hasAdjacentDuplicateCells(currentCell, nextCell);
+
+            if (hasDuplicateNotes || hasDuplicateCells) {
+                // replace cell until false
+
+            }
+
+            // Check if first notes are a fifth apart
+            Note currentCellFirstNote = currentCell.getNote(0);
+            Note nextCellFirstNote = nextCell.getNote(0);
+
+            int firstNotesAreFifths = MusicUtils.isFifthInterval(currentCellFirstNote, nextCellFirstNote);
+
+            // Add scalar motion if true
+            if (firstNotesAreFifths == 1) {
+                // going up
+                Cell scalerCell  = new Cell();
+                scalerCell.add(currentCellFirstNote);
+
+                for (int k = 0; k  < (currentCell.length() - 1); k++) {
+                    scalerCell.add(MusicUtils.getNextScalerNoteUp(scalerCell.getNote(k), currentCell.getChord()));
+                }
+
+                modifiedCell = scalerCell.copy();
+
+
+            } else if (firstNotesAreFifths == -1) {
+                // going down
+                Cell scalerCell  = new Cell();
+                scalerCell.add(currentCellFirstNote);
+
+                for (int k = 0; k  < (currentCell.length() - 1); k++) {
+                    scalerCell.add(MusicUtils.getNextScalerNoteDown(scalerCell.getNote(k), currentCell.getChord()));
+                }
+
+                modifiedCell = scalerCell.copy();
+            }
+
+            // // Apply Rhythnic Translation
+            modifiedCell = MusicUtils.applyRhythmicTranslation(modifiedCell, rhythmicCellDatabase.get(i)).copy();
+
+            lick.set(i, modifiedCell);
+
+        }
+
+
+        return lick;
+    }
 
     /**
      * converts a note name as a string to an integer. for example C4 to 60.
@@ -79,14 +150,24 @@ public final class MusicUtils implements JMC{
         }
     }
 
-    public static Note getNextScalerNoteUp(Note startingNote, int[] scaleMode) {
+    public static Note getNextScalerNoteUp(Note startingNote, Chord chord) {
+
+        int[] scaleMode = chord.getScaleMode();
+        int chordRootPitch = chord.getRootPitch();
 
         // Get scale degree
         int startingNotePitch = startingNote.getPitch();
         int scaleDegree = 1;
-        int remainder = startingNotePitch % 12;
+
+        int k = (startingNotePitch % 12);
+
+        if (k == 0) {
+            k = 12;
+        }
+
+        int difference =  k - (chordRootPitch % 12);
         for (int i = 0; i < scaleMode.length; i++) {
-            if (scaleMode[i] == remainder) {
+            if (scaleMode[i] == difference) {
                 scaleDegree = i + 1;
             }
 
@@ -106,14 +187,24 @@ public final class MusicUtils implements JMC{
         return nextNote;
     }
 
-    public static Note getNextScalerNoteDown(Note startingNote, int[] scaleMode) {
+    public static Note getNextScalerNoteDown(Note startingNote, Chord chord) {
+
+        int[] scaleMode = chord.getScaleMode();
+        int chordRootPitch = chord.getRootPitch();
 
         // Get scale degree
         int startingNotePitch = startingNote.getPitch();
         int scaleDegree = 1;
-        int remainder = startingNotePitch % 12;
+
+        int k = (startingNotePitch % 12);
+
+        if (k == 0) {
+            k = 12;
+        }
+
+        int difference =  k - (chordRootPitch % 12);
         for (int i = 0; i < scaleMode.length; i++) {
-            if (scaleMode[i] == remainder) {
+            if (scaleMode[i] == difference) {
                 scaleDegree = i + 1;
             }
 

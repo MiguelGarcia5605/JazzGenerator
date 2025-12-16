@@ -13,4 +13,8 @@ public class Chord extends ChordType{
         super(string);
         mRootPitch = rootPitch;
     }
+
+    public int getRootPitch() {
+        return mRootPitch;
+    }
 }

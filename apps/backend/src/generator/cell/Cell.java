@@ -2,6 +2,7 @@ package generator.cell;
 import jm.music.data.Note;
 import jm.music.data.Phrase;
 import generator.chord.Chord;
+import generator.chord.ChordType;
 
 public class Cell extends Phrase {
 

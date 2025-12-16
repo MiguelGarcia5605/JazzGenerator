@@ -18,13 +18,20 @@ public class Test implements JMC {
         Note noteFour = new Note(C4, EIGHTH_NOTE);
 
         int case2 = MusicUtils.isFifthInterval(noteThree, noteFour);
-        System.out.println("CASE 1: " + "\nis fifth = " + case2);
+        System.out.println("CASE 2: " + "\nis fifth = " + case2);
     
         // Case 3 should return (0)- is not a fifth
         Note noteFive = new Note(C4, EIGHTH_NOTE);
         Note noteSix = new Note(F4, EIGHTH_NOTE);
 
         int case3 = MusicUtils.isFifthInterval(noteFive, noteSix);
-        System.out.println("CASE 1: " + "\nis fifth = " + case3);
+        System.out.println("CASE 3: " + "\nis fifth = " + case3);
+
+        // Case 3 should return (+1)- is fifth going up
+        Note noteSeven = new Note(E5, EIGHTH_NOTE);
+        Note noteEight = new Note(B5, EIGHTH_NOTE);
+
+        int case4 = MusicUtils.isFifthInterval(noteSeven, noteEight);
+        System.out.println("CASE 4: " + "\nis fifth = " + case4);
     }
 }

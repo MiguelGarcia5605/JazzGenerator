@@ -1,6 +1,8 @@
 package generator.chord;
 
-public class ChordType {
+import jm.JMC;
+
+public class ChordType implements JMC{
 
     public static final int
         MAJOR_SEVENTH = 0,
@@ -49,6 +51,21 @@ public class ChordType {
                 return "halfdim7"; 
             default:
                 return "null";   
+        }
+    }
+
+    public int[] getScaleMode() {
+        switch (mChordType) {
+            case 0:
+                return MAJOR_SCALE;
+            case 1:
+                return DORIAN_SCALE;
+            // case 2:
+            //     return "dom7";
+            // case 3:
+            //     return "halfdim7"; 
+            default:
+                return null;   
         }
     }
 
