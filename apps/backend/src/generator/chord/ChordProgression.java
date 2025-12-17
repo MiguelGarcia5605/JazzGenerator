@@ -11,4 +11,8 @@ public class ChordProgression {
     public int getLength() {
         return mChords.length;
     }
+
+    public Chord getChord(int i) {
+        return mChords[i];
+    }
 }

@@ -1,0 +1,15 @@
+C4/E4/G4/B4/maj7/C4
+B4/C4/E4/G4/maj7/C4
+G4/B4/C4/E4/maj7/C4
+E4/G4/B4/C4/maj7/C4
+
+B4/G4/E4/C4/maj7/C4
+C4/B4/G4/E4/maj7/C4
+E4/C4/B4/G4/maj7/C4
+G4/E4/C4/B4/maj7/C4
+
+C4/G4/E4/B4/maj7/C4
+B4/E4/G4/C4/maj7/C4
+
+C4/D4/E4/G4/maj7/C4
+G4/E4/D4/C4/maj7/C4

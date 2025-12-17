@@ -1,14 +1,14 @@
 package generator.chord;
 
 import jm.JMC;
+import jm.constants.Scales;
 
 public class ChordType implements JMC{
 
     public static final int
         MAJOR_SEVENTH = 0,
         MINOR_SEVENTH = 1,
-        DOMINANT_SEVENTH = 2,
-        HALF_DIMINISHED_SEVENTH = 3;
+        DOMINANT_SEVENTH = 2;
 
     public int mChordType;
 
@@ -32,8 +32,6 @@ public class ChordType implements JMC{
                 return MINOR_SEVENTH;
             case "dom7":
                 return DOMINANT_SEVENTH;
-            case "halfdim7":
-                return HALF_DIMINISHED_SEVENTH; 
             default:
                 return 0;   
         }
@@ -47,8 +45,6 @@ public class ChordType implements JMC{
                 return "min7";
             case 2:
                 return "dom7";
-            case 3:
-                return "halfdim7"; 
             default:
                 return "null";   
         }
@@ -60,10 +56,8 @@ public class ChordType implements JMC{
                 return MAJOR_SCALE;
             case 1:
                 return DORIAN_SCALE;
-            // case 2:
-            //     return "dom7";
-            // case 3:
-            //     return "halfdim7"; 
+            case 2:
+                return MIXOLYDIAN_SCALE;
             default:
                 return null;   
         }

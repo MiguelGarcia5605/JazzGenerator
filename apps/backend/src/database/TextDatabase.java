@@ -6,10 +6,16 @@ import java.util.Scanner;
 
 public class TextDatabase {
 
-    ArrayList<String> mData = new ArrayList<String>();
+    ArrayList<String> mData;
     Scanner mScanner;
 
-    public void addData(String address) {
+    public TextDatabase(String address) {
+        mData = readData(address);
+    }
+
+    private ArrayList<String> readData(String address) {
+        ArrayList<String> data = new ArrayList<String>();
+
         File file = new File(address);
         
         try {
@@ -19,13 +25,19 @@ public class TextDatabase {
         }
 
         while (mScanner.hasNext()) {
-            mData.add(mScanner.next());
+            data.add(mScanner.next());
         }
 
         mScanner.close();
+
+        return data;
     }
 
     public void printData() {
         System.out.println(mData.toString());
+    }
+
+    public ArrayList<String> getData() {
+        return mData;
     }
 }
