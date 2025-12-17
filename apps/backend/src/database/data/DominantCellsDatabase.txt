@@ -1,3 +1,15 @@
 C4/E4/G4/Bb4/dom7/C4
+Bb4/C4/E4/G4/dom7/C4
+G4/Bb4/C4/E4/dom7/C4
+E4/G4/Bb4/C4/dom7/C4
+
+Bb4/G4/E4/C4/dom7/C4
+C4/Bb4/G4/E4/dom7/C4
+E4/C4/Bb4/G4/dom7/C4
+G4/E4/C4/Bb4/dom7/C4
+
+C4/G4/E4/Bb4/dom7/C4
 Bb4/E4/G4/C4/dom7/C4
-E4/Bb4/G4/C4/dom7/C4
+
+C4/D4/E4/G4/dom7/C4
+G4/E4/D4/C4/dom7/C4
