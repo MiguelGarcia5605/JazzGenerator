@@ -23,6 +23,7 @@ The program follows the following procedure to generate a jazz lick over a chord
 ## 📦 Dependencies
 
 - **JMusic Library:** https://explodingart.com/jmusic/
+  - used for musical classes and manipulation methods
 - **Tips4Java:** https://tips4java.wordpress.com/2009/11/29/text-prompt/
   -   used for simplified ghost text on JTextField objects
 
