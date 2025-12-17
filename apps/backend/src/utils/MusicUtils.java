@@ -32,47 +32,110 @@ public final class MusicUtils implements JMC{
     };
 
     public static ArrayList<Cell> generateLick(ArrayList<Cell> majorCellsArray, ArrayList<Cell> minorCellsArray, ArrayList<Cell> dominantCellsArray, ArrayList<RhythmicCell> rhythmicCellsArray, ChordProgression chordProgression) {
+        
         ArrayList<Cell> lickArray = new ArrayList<Cell>();
         
-        // Fill the chord progression with untransposed cells
+        // Fill the chord progression with cells
         for (int i = 0; i < chordProgression.getLength(); i++) {
             // Get the current chord and type
             Chord currentChordInProgression = chordProgression.getChord(i);
             int currentChordInProgressionType = currentChordInProgression.getChordType();
 
             for (int k = 0; k < 2; k++) {
-                // Pick a random cell given the chord type
-                System.out.println(currentChordInProgressionType);
-                if (currentChordInProgressionType == ChordType.MAJOR_SEVENTH) {
-                    int r = RANDOM_NUMBER_GENERATOR.nextInt(0, majorCellsArray.size());
-                    Cell cell = majorCellsArray.get(r).copy();
+                while (true) {
 
-                    int newKeyCenter = currentChordInProgression.getRootPitch();
-                    MusicUtils.transposeCell(cell, newKeyCenter);
+                    Cell candidate = null;
 
-                    lickArray.add(cell);
+                    // Select a candidate
+                    if (currentChordInProgressionType == ChordType.MAJOR_SEVENTH) {
+                        int r = RANDOM_NUMBER_GENERATOR.nextInt(0, majorCellsArray.size());
+                        candidate = majorCellsArray.get(r).copy();
 
-                    // transpose
-                } else if (currentChordInProgressionType == ChordType.MINOR_SEVENTH) {
-                    int r = RANDOM_NUMBER_GENERATOR.nextInt(0, minorCellsArray.size());
-                    Cell cell = minorCellsArray.get(r).copy();
+                        int newKeyCenter = currentChordInProgression.getRootPitch();
+                        MusicUtils.transposeCell(candidate, newKeyCenter);
+                    } else if (currentChordInProgressionType == ChordType.MINOR_SEVENTH) {
+                        int r = RANDOM_NUMBER_GENERATOR.nextInt(0, minorCellsArray.size());
+                        candidate = minorCellsArray.get(r).copy();
 
-                    int newKeyCenter = currentChordInProgression.getRootPitch();
-                    MusicUtils.transposeCell(cell, newKeyCenter);
+                        int newKeyCenter = currentChordInProgression.getRootPitch();
+                        MusicUtils.transposeCell(candidate, newKeyCenter);
+                    } else if (currentChordInProgressionType == ChordType.DOMINANT_SEVENTH) {
+                        int r = RANDOM_NUMBER_GENERATOR.nextInt(0, dominantCellsArray.size());
+                        candidate = dominantCellsArray.get(r).copy();
 
-                    lickArray.add(cell);
-                } else if (currentChordInProgressionType == ChordType.DOMINANT_SEVENTH) {
-                    int r = RANDOM_NUMBER_GENERATOR.nextInt(0, dominantCellsArray.size());
-                    Cell cell = dominantCellsArray.get(r).copy();
+                        int newKeyCenter = currentChordInProgression.getRootPitch();
+                        MusicUtils.transposeCell(candidate, newKeyCenter);
+                    }
 
-                    int newKeyCenter = currentChordInProgression.getRootPitch();
-                    MusicUtils.transposeCell(cell, newKeyCenter);
+                    // Always add first cell
+                    if(lickArray.isEmpty()) {
+                        lickArray.add(candidate);
+                        break;
+                    }
 
-                    lickArray.add(cell);
+                    // Check for against previous for duplicates
+                    Cell previousCell = lickArray.get(lickArray.size() - 1);
+                    boolean hasAdjacentDuplicateNotes = MusicUtils.hasAdjacentDuplicateNotes(previousCell, candidate);
+                    boolean hasAdjacentDuplicateCells = MusicUtils.hasAdjacentDuplicateCells(previousCell, candidate);
+
+                    if (!hasAdjacentDuplicateNotes && !hasAdjacentDuplicateCells) {
+                        // Check for fifths and implement scaler motion
+                        Note firstNoteOfPreviousCell = previousCell.getNote(0);
+                        Note firstNoteOfCandidate = candidate.getNote(0);
+                        int fifthInterval = MusicUtils.isFifthInterval(firstNoteOfPreviousCell, firstNoteOfCandidate);
+
+                        Cell previousCellCandidate = null;
+
+                        if (fifthInterval == 1) {
+                            previousCellCandidate = buildScalerCellUp(firstNoteOfPreviousCell, previousCell.getChord());
+                        } else if (fifthInterval == -1) {
+                            previousCellCandidate = buildScalerCellDown(firstNoteOfPreviousCell, previousCell.getChord());
+                        }
+
+                        if(previousCellCandidate != null) {
+                            lickArray.set(lickArray.size() - 1, previousCellCandidate);
+                        }
+
+                        lickArray.add(candidate);
+                        break;
+                    }
+
+
+
                 }
             }
         }
+
+        // Apply Rhythmic Translation
+        for (int i = 0; i < lickArray.size(); i++) {
+            int r = RANDOM_NUMBER_GENERATOR.nextInt(0, rhythmicCellsArray.size());
+            Cell candidate = MusicUtils.applyRhythmicTranslation(lickArray.get(i), rhythmicCellsArray.get(r));
+            lickArray.set(i, candidate);
+        }
+
         return lickArray;
+    }
+
+    public static Cell buildScalerCellUp(Note startingNote, Chord chord) {
+        Note[] notes = new Note[4];
+        notes[0] = startingNote;
+
+        for (int i = 1; i < 4; i++) {
+            notes[i] = getNextScalerNoteUp(notes[i - 1], chord);
+        }
+
+        return new Cell(notes, chord);
+    }
+
+    public static Cell buildScalerCellDown(Note startingNote, Chord chord) {
+        Note[] notes = new Note[4];
+        notes[0] = startingNote;
+
+        for (int i = 1; i < 4; i++) {
+            notes[i] = getNextScalerNoteDown(notes[i - 1], chord);
+        }
+
+        return new Cell(notes, chord);
     }
 
     public static void transposeCell(Cell cell, int newKeyRoot) {
@@ -138,6 +201,64 @@ public final class MusicUtils implements JMC{
         }
     }
 
+    /**
+     * 1 = is fifth going up
+     * -1 = is fifth going down
+     * 0 = is not fifth
+     */
+    public static int canMoveScaler(Cell leftMostCell, Cell rightMostCell) {
+        // Get scale degree for left
+        int[] leftMostCellScaleMode = leftMostCell.getChord().getScaleMode();
+        Note leftMostCellStartingNote = leftMostCell.getNote(0);
+        int leftMostCellChordRootPitch = leftMostCell.getChord().getRootPitch();
+
+        int leftMostCellStartingNotePitch = leftMostCellStartingNote.getPitch();
+        int leftMostCellScaleDegree = 1;
+
+        int k = (leftMostCellStartingNotePitch % 12);
+
+        if (k == 0) {
+            k = 12;
+        }
+
+        int difference1 =  k - (leftMostCellChordRootPitch % 12);
+        for (int i = 0; i < leftMostCellScaleMode.length; i++) {
+            if (leftMostCellScaleMode[i] == difference1) {
+                leftMostCellScaleDegree = i + 1;
+            }
+
+        }
+
+        // Get scale degree for right
+        int[] rightMostCellScaleMode = rightMostCell.getChord().getScaleMode();
+        Note rightMostCellStartingNote = rightMostCell.getNote(0);
+        int rightMostCellChordRootPitch = rightMostCell.getChord().getRootPitch();
+
+        int rightMostCellStartingNotePitch = rightMostCellStartingNote.getPitch();
+        int rightMostCellScaleDegree = 1;
+
+        int j = (rightMostCellStartingNotePitch % 12);
+
+        if (j == 0) {
+            j = 12;
+        }
+
+        int difference2 =  j - (rightMostCellChordRootPitch % 12);
+        for (int i = 0; i < rightMostCellScaleMode.length; i++) {
+            if (rightMostCellScaleMode[i] == difference2) {
+                rightMostCellScaleDegree = i + 1;
+            }
+
+        }
+
+        int scaleDegreeDifference = rightMostCellScaleDegree - leftMostCellScaleDegree;
+
+        if (scaleDegreeDifference == 4) return 1;
+        if (scaleDegreeDifference == -4) return -1;
+
+        return 0;
+    }
+
     public static Note getNextScalerNoteUp(Note startingNote, Chord chord) {
 
         int[] scaleMode = chord.getScaleMode();
@@ -153,7 +274,8 @@ public final class MusicUtils implements JMC{
             k = 12;
         }
 
-        int difference =  k - (chordRootPitch % 12);
+        int difference = (k - (chordRootPitch % 12) + 12) % 12;
+
         for (int i = 0; i < scaleMode.length; i++) {
             if (scaleMode[i] == difference) {
                 scaleDegree = i + 1;
@@ -190,7 +312,7 @@ public final class MusicUtils implements JMC{
             k = 12;
         }
 
-        int difference =  k - (chordRootPitch % 12);
+        int difference = (k - (chordRootPitch % 12) + 12) % 12;
         for (int i = 0; i < scaleMode.length; i++) {
             if (scaleMode[i] == difference) {
                 scaleDegree = i + 1;

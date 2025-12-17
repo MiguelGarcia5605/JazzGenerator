@@ -81,13 +81,13 @@ public class AppWindow {
         mFrame = new JFrame();
         mButton = new JButton(BUTTON_GHOST_TEXT);
         mTextField1 = new JTextField();
-        //mTextField2 = new JTextField();
+        mTextField2 = new JTextField();
 
         mGhostText1 = new TextPrompt(TEXT_FIELD_1_GHOST_TEXT, mTextField1);
-        //mGhostText2 = new TextPrompt(TEXT_FIELD_2_GHOST_TEXT, mTextField2);
+        mGhostText2 = new TextPrompt(TEXT_FIELD_2_GHOST_TEXT, mTextField2);
 
         mGhostText1.changeAlpha(GHOST_TEXT_OPAQUE_VALUE);
-        //mGhostText2.changeAlpha(GHOST_TEXT_OPAQUE_VALUE);
+        mGhostText2.changeAlpha(GHOST_TEXT_OPAQUE_VALUE);
 
         mFrame.setTitle(TITLE);
         mFrame.setResizable(false);
@@ -96,11 +96,11 @@ public class AppWindow {
 
         mButton.setBounds(BUTTON_BOUNDS);
         mTextField1.setBounds(TEXT_FIELD_1_BOUNDS);
-        //mTextField2.setBounds(TEXT_FIELD_2_BOUNDS);
+        mTextField2.setBounds(TEXT_FIELD_2_BOUNDS);
 
         mFrame.add(mButton);
         mFrame.add(mTextField1);
-        //mFrame.add(mTextField2);
+        mFrame.add(mTextField2);
 
         mFrame.setIconImage(ICON.getImage());
         mFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);

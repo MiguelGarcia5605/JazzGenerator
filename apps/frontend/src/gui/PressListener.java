@@ -2,6 +2,7 @@ package gui;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 
 import generator.generator.Generator;
 import jm.music.data.Part;
@@ -21,10 +22,10 @@ public class PressListener implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent ae) {
         String field1Text = mAppWindow.getField1Text();
-        //String field2Text = mAppWindow.getField2Text();
+        String field2Text = mAppWindow.getField2Text();
         
         Part lick = mGenerator.createLickOverProgression(MusicUtils.stringToChordProgression(field1Text));
 
-        Write.midi(lick, "boooom.mid");
+        Write.midi(lick, field2Text + "\\lick.mid");
     }
 }
