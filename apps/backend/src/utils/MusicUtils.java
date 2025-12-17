@@ -32,151 +32,55 @@ public final class MusicUtils implements JMC{
     };
 
     public static ArrayList<Cell> generateLick(ArrayList<Cell> majorCellsArray, ArrayList<Cell> minorCellsArray, ArrayList<Cell> dominantCellsArray, ArrayList<RhythmicCell> rhythmicCellsArray, ChordProgression chordProgression) {
-        ArrayList<Cell> lick = new ArrayList<Cell>();
-
-        // Add random cells from cell database
+        ArrayList<Cell> lickArray = new ArrayList<Cell>();
+        
+        // Fill the chord progression with untransposed cells
         for (int i = 0; i < chordProgression.getLength(); i++) {
-            Chord currentProgressionChord = chordProgression.getChord(i);
+            // Get the current chord and type
+            Chord currentChordInProgression = chordProgression.getChord(i);
+            int currentChordInProgressionType = currentChordInProgression.getChordType();
 
-            if (currentProgressionChord.getChordType() == ChordType.MAJOR_SEVENTH) {
-                Cell cell1 = majorCellsArray.get(RANDOM_NUMBER_GENERATOR.nextInt(0, majorCellsArray.size()));
-                Cell cell2 = majorCellsArray.get(RANDOM_NUMBER_GENERATOR.nextInt(0, majorCellsArray.size()));
-                if (currentProgressionChord.getRootPitch() != cell1.getChord().getRootPitch()) {
-                    // transpose cells
-                    int amountToTranspose = currentProgressionChord.getRootPitch()  + -cell1.getChord().getRootPitch();
-                    int amountToTranspose2 = currentProgressionChord.getRootPitch() + -cell2.getChord().getRootPitch();
-                    Mod.transpose(cell1, amountToTranspose);
-                    Mod.transpose(cell2, amountToTranspose2);
-                }
-                lick.add(cell1);
-                lick.add(cell2);
+            for (int k = 0; k < 2; k++) {
+                // Pick a random cell given the chord type
+                System.out.println(currentChordInProgressionType);
+                if (currentChordInProgressionType == ChordType.MAJOR_SEVENTH) {
+                    int r = RANDOM_NUMBER_GENERATOR.nextInt(0, majorCellsArray.size());
+                    Cell cell = majorCellsArray.get(r).copy();
 
-            } else if (currentProgressionChord.getChordType() == ChordType.MINOR_SEVENTH) {
-                Cell cell1 = minorCellsArray.get(RANDOM_NUMBER_GENERATOR.nextInt(0, minorCellsArray.size()));
-                Cell cell2 = minorCellsArray.get(RANDOM_NUMBER_GENERATOR.nextInt(0, minorCellsArray.size()));
-                lick.add(cell1);
-                lick.add(cell2);
-                if (currentProgressionChord.getRootPitch() != cell1.getChord().getRootPitch()) {
-                    // transpose cells
-                    int amountToTranspose = currentProgressionChord.getRootPitch()  + -cell1.getChord().getRootPitch();
-                    int amountToTranspose2 = currentProgressionChord.getRootPitch() + -cell2.getChord().getRootPitch();
-                    Mod.transpose(cell1, amountToTranspose);
-                    Mod.transpose(cell2, amountToTranspose2);
+                    int newKeyCenter = currentChordInProgression.getRootPitch();
+                    MusicUtils.transposeCell(cell, newKeyCenter);
+
+                    lickArray.add(cell);
+
+                    // transpose
+                } else if (currentChordInProgressionType == ChordType.MINOR_SEVENTH) {
+                    int r = RANDOM_NUMBER_GENERATOR.nextInt(0, minorCellsArray.size());
+                    Cell cell = minorCellsArray.get(r).copy();
+
+                    int newKeyCenter = currentChordInProgression.getRootPitch();
+                    MusicUtils.transposeCell(cell, newKeyCenter);
+
+                    lickArray.add(cell);
+                } else if (currentChordInProgressionType == ChordType.DOMINANT_SEVENTH) {
+                    int r = RANDOM_NUMBER_GENERATOR.nextInt(0, dominantCellsArray.size());
+                    Cell cell = dominantCellsArray.get(r).copy();
+
+                    int newKeyCenter = currentChordInProgression.getRootPitch();
+                    MusicUtils.transposeCell(cell, newKeyCenter);
+
+                    lickArray.add(cell);
                 }
-                
-            } else if (currentProgressionChord.getChordType() == ChordType.DOMINANT_SEVENTH) {
-                Cell cell1 = dominantCellsArray.get(RANDOM_NUMBER_GENERATOR.nextInt(0, dominantCellsArray.size()));
-                Cell cell2 = dominantCellsArray.get(RANDOM_NUMBER_GENERATOR.nextInt(0, dominantCellsArray.size()));
-                if (currentProgressionChord.getRootPitch() != cell1.getChord().getRootPitch()) {
-                    // transpose cells
-                    int amountToTranspose = currentProgressionChord.getRootPitch()  + -cell1.getChord().getRootPitch();
-                    int amountToTranspose2 = currentProgressionChord.getRootPitch() + -cell2.getChord().getRootPitch();
-                    Mod.transpose(cell1, amountToTranspose);
-                    Mod.transpose(cell2, amountToTranspose2);
-                }
-                lick.add(cell1);
-                lick.add(cell2);
             }
         }
-
-        // loop through lick and modify cell
-        for (int i = 0; i < (lick.size() - 1); i++) {
-            Cell currentCell = lick.get(i);
-            Cell nextCell = lick.get(i + 1);
-            
-            // Check if lick has adjacent duplicate cells or notes
-            boolean hasDuplicateNotes = MusicUtils.hasAdjacentDuplicateNotes(currentCell, nextCell);
-            boolean hasDuplicateCells = MusicUtils.hasAdjacentDuplicateCells(currentCell, nextCell);
-
-            if (hasDuplicateNotes || hasDuplicateCells) {
-                // replace cell until false
-                while (true) {
-                    Chord currentProgressionChord = chordProgression.getChord((i / 2));
-                    Chord currentCellChord = lick.get(i).getChord();
-    
-                    if (currentProgressionChord.getChordType() == ChordType.MAJOR_SEVENTH) {
-                        Cell replacement = majorCellsArray.get(RANDOM_NUMBER_GENERATOR.nextInt(0, majorCellsArray.size()));
-                        if (currentProgressionChord.getRootPitch() != currentCellChord.getRootPitch()) {
-                            // transpose cells
-                            int amountToTranspose = currentProgressionChord.getRootPitch()  + -currentCellChord.getRootPitch();
-                            Mod.transpose(replacement, amountToTranspose);
-                        }
-                        lick.set(i, replacement);
-    
-                    } else if (currentProgressionChord.getChordType() == ChordType.MINOR_SEVENTH) {
-                        Cell replacement = minorCellsArray.get(RANDOM_NUMBER_GENERATOR.nextInt(0, minorCellsArray.size()));
-                        if (currentProgressionChord.getRootPitch() != currentCellChord.getRootPitch()) {
-                            // transpose cells
-                            int amountToTranspose = currentProgressionChord.getRootPitch()  + -currentCellChord.getRootPitch();
-                            Mod.transpose(replacement, amountToTranspose);
-                        }
-                        lick.set(i, replacement);
-                        
-                    } else if (currentProgressionChord.getChordType() == ChordType.DOMINANT_SEVENTH) {
-                        Cell replacement = dominantCellsArray.get(RANDOM_NUMBER_GENERATOR.nextInt(0, dominantCellsArray.size()));
-                        if (currentProgressionChord.getRootPitch() != currentCellChord.getRootPitch()) {
-                            // transpose cells
-                            int amountToTranspose = currentProgressionChord.getRootPitch()  + -currentCellChord.getRootPitch();
-                            Mod.transpose(replacement, amountToTranspose);
-                        }
-                        lick.set(i, replacement);
-
-                    }
-
-                    // Check if lick has adjacent duplicate cells or notes
-                    hasDuplicateNotes = MusicUtils.hasAdjacentDuplicateNotes(lick.get(i), nextCell);
-                    hasDuplicateCells = MusicUtils.hasAdjacentDuplicateCells(lick.get(i), nextCell);
-
-                    if (!hasDuplicateNotes && !hasDuplicateCells) {
-                        break;
-                    }
-                }
-
-            }
-
-            // Check if first notes are a fifth apart
-            Cell newCurrentCell = lick.get(i);
-            Cell newNextCell = lick.get(i + 1);
-
-            Note currentCellFirstNote = newCurrentCell.getNote(0);
-            Note nextCellFirstNote = newNextCell.getNote(0);
-
-            int firstNotesAreFifths = MusicUtils.isFifthInterval(currentCellFirstNote, nextCellFirstNote);
-
-            // Add scalar motion if true
-            if (firstNotesAreFifths == 1) {
-                // going up
-                Cell scalerCell = new Cell();
-                scalerCell.add(currentCellFirstNote);
-
-                for (int k = 0; k  < (newCurrentCell.length() - 1); k++) {
-                    scalerCell.add(MusicUtils.getNextScalerNoteUp(scalerCell.getNote(k), newCurrentCell.getChord()));
-                }
-
-                lick.set(i, scalerCell);
-
-
-            } else if (firstNotesAreFifths == -1) {
-                // going down
-                Cell scalerCell  = new Cell();
-                scalerCell.add(currentCellFirstNote);
-
-                for (int k = 0; k  < (currentCell.length() - 1); k++) {
-                    scalerCell.add(MusicUtils.getNextScalerNoteDown(scalerCell.getNote(k), currentCell.getChord()));
-                }
-
-                lick.set(i, scalerCell);
-            }
-
-            // // Apply Rhythnic Translation
-            Cell modifiedCell = MusicUtils.applyRhythmicTranslation(lick.get(i), rhythmicCellsArray.get(RANDOM_NUMBER_GENERATOR.nextInt(0, rhythmicCellsArray.size())));
-
-            lick.set(i, modifiedCell);
-
-        }
-
-        return lick;
+        return lickArray;
     }
+
+    public static void transposeCell(Cell cell, int newKeyRoot) {
+        int semitones = (newKeyRoot % 12) - (cell.getRootPitch() % 12);
+        Mod.transpose(cell, semitones);
+        cell.getChord().transpose(semitones);
+    }
+
 
     /**
      * converts a note name as a string to an integer. for example C4 to 60.

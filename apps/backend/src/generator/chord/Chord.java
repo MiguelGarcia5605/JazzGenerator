@@ -17,4 +17,8 @@ public class Chord extends ChordType{
     public int getRootPitch() {
         return mRootPitch;
     }
+
+    public void transpose(int semitones) {
+        mRootPitch += semitones;
+    }
 }

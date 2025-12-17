@@ -25,6 +25,10 @@ public class Cell extends Phrase {
         mChord = chord;
     }
 
+    public int getRootPitch() {
+        return mChord.getRootPitch();
+    }
+
     @Override
     public Cell copy() {
         Cell copy = new Cell();
