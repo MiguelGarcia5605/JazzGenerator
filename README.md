@@ -1,39 +1,16 @@
-# 🎷 Jazz Lick Generator
+# Jazz Lick Generator
 
-A Java-based tool that generates original jazz licks from user-provided chord progressions. The program outputs a MIDI file and uses the **JMusic** library for MIDI creation and manipulation.
+This project is music generation tool intended to generate jazz licks over common jazz chord types.
 
-## 📘 Concept
+## Chord Types
 
-This project creates a melodic jazz phrase (a “lick”) using a chord progression consisting of:
+This project currently allows the chord types:
 
 - Major 7
 - Minor 7
 - Dominant 7
-- Dominant 7 (♭9)
-- Half-diminished 7
 
-Chords can be placed only on beats **1** and **3**.  
-Once the progression is submitted, the program constructs a unique lick using melodic cells, scale logic, rhythm variations, and controlled randomness.
-
-## 🧱 Project Structure
-
-### **LickGenerator**
-- Core class responsible for generating the full lick.
-- Combines MelodicCells, Scales, and random number logic.
-
-### **MelodicCell**
-- Small musical “vocabulary” unit tied to a specific chord.
-- Contains: note, rhythm, length, and chord context.
-- Used as building blocks for entire phrases.
-
-### **Scales**
-- Stores scale note values used when adding scalar motion.
-
-### **UserInterface**
-- Handles input from the user.
-- Provides a simple and minimal GUI.
-
-## 🎼 Lick Generation Algorithm
+##  Lick Generation Algorithm
 
 1. Build a basic lick using chord-tone MelodicCells.
 2. Add scalar motion using the Scales class.
