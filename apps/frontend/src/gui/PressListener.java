@@ -13,10 +13,12 @@ public class PressListener implements ActionListener {
 
     AppWindow mAppWindow;
     Generator mGenerator;
+    int mCount;
 
     public PressListener(AppWindow appWindow, Generator generator) {
         mAppWindow = appWindow;
         mGenerator = generator;
+        mCount = 0;
     }
 
     @Override
@@ -26,6 +28,7 @@ public class PressListener implements ActionListener {
         
         Part lick = mGenerator.createLickOverProgression(MusicUtils.stringToChordProgression(field1Text));
 
-        Write.midi(lick, field2Text + "\\lick.mid");
+        Write.midi(lick, field2Text + "\\lick(" + mCount + ").mid");
+        mCount++;
     }
 }
