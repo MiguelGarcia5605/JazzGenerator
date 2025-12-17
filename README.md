@@ -24,7 +24,7 @@ The program follows the following procedure to generate a jazz lick over a chord
 
 - **JMusic Library:** https://explodingart.com/jmusic/
 - **Tips4Java:** https://tips4java.wordpress.com/2009/11/29/text-prompt/
--   used for simplified ghost text on JTextField objects
+  -   used for simplified ghost text on JTextField objects
 
 ---
 
