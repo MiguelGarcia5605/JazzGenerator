@@ -1,23 +1,17 @@
-package tools;
+package generator.cell;
 import jm.music.data.Note;
 import jm.music.data.Phrase;
+import generator.chord.Chord;
+import generator.chord.ChordType;
 
-/**
- * This class represents a musical phrase associated with a chord.
- */
 public class Cell extends Phrase {
-    
+
     public Chord mChord;
 
     public Cell() {
         super();
     }
 
-    /**
-     * Constructs a Cell Object.
-     * @param notes : the notes
-     * @param chord : the chord context
-     */
     public Cell(Note[] notes, Chord chord) {
         super(notes);
         mChord = chord;
@@ -29,6 +23,10 @@ public class Cell extends Phrase {
 
     public void setChord(Chord chord) {
         mChord = chord;
+    }
+
+    public int getRootPitch() {
+        return mChord.getRootPitch();
     }
 
     @Override
